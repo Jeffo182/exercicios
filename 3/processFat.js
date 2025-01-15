@@ -1,4 +1,4 @@
-const faturamentoDiario = require('./fatDiario.json');
+const faturamentoDiario = require('./dados.json');
 function processarFaturamento(faturamentoDiario) {
   let menorFaturamento = Infinity;
   let maiorFaturamento = -Infinity;
@@ -6,23 +6,23 @@ function processarFaturamento(faturamentoDiario) {
   let diasComFaturamento = 0;
 
   faturamentoDiario.forEach((dia) => {
-      if (dia.faturamento > 0) {
+      if (dia.valor > 0) {
 
-          if (dia.faturamento < menorFaturamento) {
-              menorFaturamento = dia.faturamento;
+          if (dia.valor < menorFaturamento) {
+              menorFaturamento = dia.valor;
           }
-          if (dia.faturamento > maiorFaturamento) {
-              maiorFaturamento = dia.faturamento;
+          if (dia.valor > maiorFaturamento) {
+              maiorFaturamento = dia.valor;
           }
 
-          somaFaturamento += dia.faturamento;
+          somaFaturamento += dia.valor;
           diasComFaturamento++;
       }
   });
 
   const mediaMensal = somaFaturamento / diasComFaturamento;
 
-  let diasAcimaDaMedia = faturamentoDiario.filter(dia => dia.faturamento > mediaMensal).length;
+  let diasAcimaDaMedia = faturamentoDiario.filter(dia => dia.valor > mediaMensal).length;
 
   return {
       menorFaturamento: menorFaturamento,
@@ -32,7 +32,12 @@ function processarFaturamento(faturamentoDiario) {
 }
 
 const resultado = processarFaturamento(faturamentoDiario);
-console.log("Menor faturamento:", resultado.menorFaturamento);
-console.log("Maior faturamento:", resultado.maiorFaturamento);
-console.log("Dias com faturamento acima da média:", resultado.diasAcimaDaMedia);
+const formatarComoReais = (valor) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+  };
+  
+  console.log("Menor faturamento:", formatarComoReais(resultado.menorFaturamento));
+  console.log("Maior faturamento:", formatarComoReais(resultado.maiorFaturamento));
+  console.log("Dias com faturamento acima da média:", resultado.diasAcimaDaMedia);
+  
 
